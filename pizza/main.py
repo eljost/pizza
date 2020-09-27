@@ -98,6 +98,19 @@ def main():
         DISPLAY.blit(menu_surf, (0, 0))
         DISPLAY.blit(pizza, PIZZA_TOP_LEFT)
 
+    def center_pos(source, pos):
+        x, y = source.get_rect().center
+        w, h = pos
+        return w - x//2, h - y // 2
+
+    def pizza_blit(source, dest):
+        p_dest = pizza_pos(dest)
+        x, y = source.get_rect().center
+        pw, ph = p_dest
+        p_dest_ = pw - x//2, ph - y//2
+        # import pdb; pdb.set_trace()
+        pizza.blit(source, center_pos(source, p_dest))
+
     cur_topping = 0
 
     def get_cur_png(rotate=False):
@@ -122,17 +135,16 @@ def main():
                         cur_png = get_cur_png(rotate=True)
                         print(f"Selected topping {i}")
             # Add topping if clicked on pizza
-            p_pos = pizza_pos(pos)
-            if on_pizza(p_pos):
-                print("blit on pizza @", p_pos)
-                pizza.blit(cur_png, p_pos)
+            if on_pizza(pizza_pos(pos)):
+                print("blit on pizza @", pos)
+                pizza_blit(cur_png, pos)
                 cur_png = get_cur_png(rotate=True)
             draw()
         elif event.type == pg.MOUSEMOTION:
             pos = event.pos
             draw()
             if not on_menu(pos):
-                DISPLAY.blit(cur_png, pos)
+                DISPLAY.blit(cur_png, center_pos(cur_png, pos))
         # Quit
         elif event.type == pg.QUIT:
             quit()
