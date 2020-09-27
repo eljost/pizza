@@ -7,7 +7,6 @@ import numpy as np
 import pygame as pg
 
 
-
 SIZE = (1000, 1000)
 WIDTH, HEIGHT = SIZE
 MENU_HEIGHT = 100
@@ -30,7 +29,14 @@ PIZZA_RADIUS = 450
 # SALAMI
 SALAMI_RADIUS = 35
 
-topping_pngs = ("sauce.png", "salami.png", "cheese.png", "shroom.png", "brokooli.png")
+topping_pngs = (
+    "sauce.png",
+    "salami.png",
+    "cheese.png",
+    "shroom.png",
+    "brokooli.png",
+    "onion.png",
+)
 TOPPINGS = [pg.image.load(png) for png in topping_pngs]
 
 
@@ -101,13 +107,13 @@ def main():
     def center_pos(source, pos):
         x, y = source.get_rect().center
         w, h = pos
-        return w - x//2, h - y // 2
+        return w - x // 2, h - y // 2
 
     def pizza_blit(source, dest):
         p_dest = pizza_pos(dest)
         x, y = source.get_rect().center
         pw, ph = p_dest
-        p_dest_ = pw - x//2, ph - y//2
+        p_dest_ = pw - x // 2, ph - y // 2
         # import pdb; pdb.set_trace()
         pizza.blit(source, center_pos(source, p_dest))
 
@@ -118,6 +124,7 @@ def main():
         if rotate:
             cur_png = pg.transform.rotate(cur_png, random.randrange(-180, 181))
         return cur_png
+
     cur_png = get_cur_png()
 
     draw()
@@ -151,6 +158,10 @@ def main():
         elif event.type == pg.KEYDOWN:
             if event.key == pg.K_ESCAPE:
                 quit()
+            elif event.key == pg.K_r:
+                print("Reset pizza")
+                pizza = get_pizza()
+                draw()
 
         pg.display.update()
 
